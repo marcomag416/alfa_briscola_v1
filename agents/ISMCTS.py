@@ -28,7 +28,7 @@ class Node:
         self.move = move  # the move that got us to this node - "None" for the root node
         self.parentNode = parent  # "None" for the root node
         self.childNodes = []
-        self.wins = 0
+        self.wins = 0.0
         self.visits = 0
         self.avails = 1
         self.playerJustMoved = (
@@ -80,14 +80,18 @@ class Node:
         """
         self.visits += 1
         if self.playerJustMoved is not None:
-            self.wins += terminalState.GetResult(self.playerJustMoved, get_points=consider_points)
+            score = terminalState.GetResult(self.playerJustMoved, get_points=consider_points)
+            if(consider_points):
+                score = float(score) / 60.0
+            self.wins += score
 
     def __repr__(self):
-        return "[M:%s W/V/A: %4i/%4i/%4i]" % (
+        return "[M:%s W/V/A|E: %4.2f/%4i/%4i|%4.2f]" % (
             self.move,
             self.wins,
             self.visits,
             self.avails,
+            self.wins / self.visits if self.visits > 0 else 0,
         )
 
     def TreeToString(self, indent):
@@ -110,7 +114,7 @@ class Node:
             s += str(c) + "\n"
         return s
 
-def ISMCTS(rootstate, itermax=100, timed=False, thinking_time=1, verbose=False, consider_points=False):
+def ISMCTS(rootstate, itermax=100, timed=False, thinking_time=1, verbose=1, consider_points=False):
     """ Conduct an ISMCTS search for itermax iterations or thinking_time seconds starting from rootstate.
         timed is a boolean that determines whether the search is time-based or iteration-based.
         Return the best move from the rootstate.
@@ -153,9 +157,9 @@ def ISMCTS(rootstate, itermax=100, timed=False, thinking_time=1, verbose=False, 
             node = node.parentNode
 
     # Output some information about the tree - can be omitted
-    if verbose:
+    if verbose == 2:
         print(rootnode.TreeToString(0))
-    else:
+    elif verbose == 1:
         print(rootnode.ChildrenToString())
 
     return max(

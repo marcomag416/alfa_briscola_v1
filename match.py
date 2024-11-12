@@ -13,19 +13,13 @@ def main():
     args = parser.parse_args()
     
     random.seed(args.seed)
-    agents_iter = {
-        1: lambda s: ISMCTS.ISMCTS(rootstate=s, itermax=100, verbose=True, consider_points=args.points),
-        2: lambda s: ISMCTS.ISMCTS(rootstate=s, itermax=100, verbose=False, consider_points=args.points),
-        3: lambda s: ISMCTS.ISMCTS(rootstate=s, itermax=100, verbose=False, consider_points=args.points),
-        4: lambda s: ISMCTS.ISMCTS(rootstate=s, itermax=100, verbose=False, consider_points=args.points),
+    agents = {
+        1: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=args.timed, itermax=200, thinking_time=5, verbose=1, consider_points=args.points),
+        2: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=args.timed, itermax=100, thinking_time=5, verbose=1, consider_points=args.points),
+        3: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=args.timed, itermax=100, thinking_time=5, verbose=1, consider_points=args.points),
+        4: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=args.timed, itermax=100, thinking_time=5, verbose=1, consider_points=args.points),
     }
-    agents_timed = {
-        1: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=True, thinking_time=5, verbose=False),
-        2: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=True, thinking_time=5, verbose=False),
-        3: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=True, thinking_time=5, verbose=False),
-        4: lambda s: ISMCTS.ISMCTS(rootstate=s, timed=True, thinking_time=5, verbose=False),
-    }
-    agents = agents_timed if args.timed else agents_iter
+
     for i in range(args.repeat):
         briscola.PlayGame(args.players, agents, verbose=True)
 
