@@ -1,7 +1,7 @@
 Information Set Monte Carlo Tree Search
 =======================================
 
-Python 3 implementation of ISMCTS for the game of simplified Knockout Whist.
+Python 3 implementation of ISMCTS for the game of briscola.
 
 Based on https://github.com/melvinzhang/ismcts/tree/master
 
